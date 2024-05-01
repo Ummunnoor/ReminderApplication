@@ -1,0 +1,44 @@
+﻿@using ReminderApplication.DTOs.ResponseModels
+@model EventsResponseModel
+@if (@Model.Data.Count == 0)
+{
+    <h1>No Event yet</h1>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table" id="list">
+            <caption>List of Events</caption>
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">StartDateTime</th>
+                    <th scope="col">EndDateTime</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var appointment in @Model.Data)
+                {
+                    <tr>
+                        <th scope="row">@appointment.Id</th>
+                        <td>@appointment.UserName</td>
+                        <td>@appointment.Title</td>
+                        <td>@appointment.Location</td>
+                        <td>@appointment.StartDateTime</td>
+                        <td>@appointment.EndDateTime</td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn-danger btn" asp-action="CancelEvent" type="submit" asp-route-id=@appointment.Id>Cancel</a>
+                            </div>
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+}
+

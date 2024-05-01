@@ -1,0 +1,27 @@
+﻿@using ReminderApplication.DTOs.ResponseModels
+@model EventsResponseModel
+<div class="table-responsive">
+    <table class="table">
+        <caption>Events</caption>
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var appoint in @Model.Data)
+            {
+                <tr>
+                    <th scope="row">@appoint.Id</th>
+                    <td>@appoint.StartDateTime</td>
+                </tr>
+            <td>
+                <div class="btn-group">
+                    <a class="btn-danger btn" asp-action="CancelEvent" type="submit" asp-route-id=@appoint.Id>Cancel</a>
+                </div>
+            </td>
+            }
+        </tbody>
+    </table>
+</div>

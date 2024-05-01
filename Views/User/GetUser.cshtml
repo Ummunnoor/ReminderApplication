@@ -1,0 +1,24 @@
+﻿@page
+@using ReminderApplication.DTOs.ResponseModels
+@model UserResponseModel;
+if (@Model == null)
+@{
+    <h1>No User with such identity</h1>
+}
+else
+{
+<div> class ="table-responsive"</div>
+<table class="table" id="list">
+    <caption>User Data</caption>
+    <thead>
+        <tr>
+            <th scope="col">First Name</th>
+            <th scope="col">Second Name</th>
+            <th scope="col">Username</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone Number</th>
+        </tr>
+    </thead>
+</table>
+}
+

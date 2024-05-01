@@ -1,0 +1,42 @@
+﻿@using ReminderApplication.DTOs.ResponseModels
+@model EventsResponseModel
+@{
+    ViewData["Title"] = "DashBoard";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Events</title>
+</head>
+<body>
+    <h1>List of Events</h1>
+    @if (Model.Data.Count > 0)
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Location</th>
+                    <th>StartDateTime</th>
+                    <th>EndDateTime</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var reminderEvent in Model.Data)
+                {
+                    <tr>
+                        <td>@reminderEvent.Title</td>
+                        <td>@reminderEvent.Location</td>
+                        <td>@reminderEvent.StartDateTime</td>
+                        <td>@reminderEvent.EndDateTime</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No Events to display.</p>
+    }
+</body>
+</html>

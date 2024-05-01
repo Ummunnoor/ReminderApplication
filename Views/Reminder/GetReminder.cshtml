@@ -1,0 +1,45 @@
+﻿@using ReminderApplication.DTOs.ResponseModels
+@model RemindersResponseModel
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reminders for Events</title>
+</head>
+<body>
+    <h1>Reminders for Events</h1>
+
+    @if (Model.Data.Count > 0)
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Reminder Date and Time</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var reminder in Model.Data)
+                {
+                    <tr>
+
+                        <td>@reminder.ReminderDateTime.ToShortDateString()</td>
+
+                        <td>
+                            <a href="@Url.Action("Update", "Reminder", new { id = reminder.EventID })">Update</a> |
+                            <a href="@Url.Action("Delete", "Reminder", new { id = reminder.EventID })">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No reminders found for this event.</p>
+    }
+</body>
+
