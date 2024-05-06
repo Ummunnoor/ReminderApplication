@@ -4,8 +4,9 @@ using ReminderApplication.DTOs;
 using ReminderApplication.Entities;
 using ReminderApplication.Implementations.Repositories;
 using ReminderApplication.Interfaces.Repositories;
-using ReminderApplication.Interfaces.Services;
 using ReminderApplication.Entities.Enums;
+using ReminderApplication.EmailServices;
+using ReminderApplication.Interfaces.Services;
 
 namespace ReminderApplication.Implementations.Services
 {
@@ -14,38 +15,49 @@ namespace ReminderApplication.Implementations.Services
         private readonly IReminderRepository _reminderRepository;
         private readonly IEventRepository _eventRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IMailServices _mailService;
 
-        public ReminderService(IReminderRepository reminderRepository, IEventRepository eventRepository, IUserRepository userRepository)
+        public ReminderService(IMailServices mailService, IReminderRepository reminderRepository, IEventRepository eventRepository, IUserRepository userRepository)
         {
             _reminderRepository = reminderRepository;
             _eventRepository = eventRepository;
             _userRepository = userRepository;
+            _mailService = mailService;
         }
         public async Task<BaseResponse> CreateReminderAsync(CreateReminderRequestModel model)
         {
-            var reminder = await _eventRepository.GetAsync(r => r.Equals(model.EventID) && r.Equals(model.UserID));
-            if (reminder != null)
+            var @event = await _eventRepository.GetAsync(r => r.Id.Equals(model.EventID) && r.UserId.Equals(model.UserID) && r.StartDateTime.Equals(model.EventDate));
+            if (@event is null)
             {
                 return new BaseResponse()
                 {
-                    Message = $"Reminders has already been created for {model.UserName} event {model.EventID}",
+                    Message = "Event does not exist",
                     Success = false,
                 };
             }
             var reminders = new Reminder
             {
-                EventID = model.EventID,
+                EventID = @event.Id,
+                Event = @event,
                 UserID = model.UserID,
                 UserName = model.UserName,
                 PhoneNumer = model.PhoneNumber,
                 ReminderDateTime = model.ReminderDateTime,
-                EventTitle = model.EventTitle,
+                EventTitle = model.EventTitle,  
                 EventDate = model.EventDate,
                 Status = model.Status,
 
 
             };
             await _reminderRepository.CreateAsync(reminders);
+            var mailRequest = new MailRequest
+            {
+                Subject = "Welcome To Reminder Application",
+                ToEmail = @event.User.Email,
+                ToName = @event.User.Email,
+                HtmlContent = $"<html><body><h1>Hello {@event.User.Email}, You have successfully created a reminder for {model.UserName}/'s event.</h1></body></html>",
+            };
+            _mailService.SendEMailAsync(mailRequest);
             return new BaseResponse()
             {
                 Message = $"You have successfully created a reminder for {model.UserName}/'s event.",

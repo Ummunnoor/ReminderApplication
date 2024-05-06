@@ -14,7 +14,7 @@ namespace ReminderApplication.Controllers
             _reminderService = reminderService;
             _eventService = eventService;
         }
-        public async Task<IActionResult> Create1(CreateReminderRequestModel model)
+        public async Task<IActionResult> Create(CreateReminderRequestModel model)
         {
             if (HttpContext.Request.Method == "POST")
             {

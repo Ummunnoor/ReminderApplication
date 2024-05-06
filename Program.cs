@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using ReminderApplication.Context;
+using ReminderApplication.EmailServices;
 using ReminderApplication.Implementations.Repositories;
 using ReminderApplication.Implementations.Services;
 using ReminderApplication.Interfaces.Repositories;
@@ -32,6 +33,7 @@ builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IReminderService, ReminderService>();
 builder.Services.AddScoped<IReminderRepository, ReminderRepository>();
 
+builder.Services.AddScoped<IMailServices, MailService>();
 
 var app = builder.Build();
 

@@ -13,7 +13,7 @@ namespace ReminderApplication.Entities
         public DateTime ReminderDateTime { get; set; } = DateTime.Now;
         public string EventTitle { get; set; }
         public DateTime EventDate { get; set; }
-        public string Notification { get; set; }
+        public string? Notification { get; set; }
         public EventStatus Status { get; set; }
 
         // Navigation property
