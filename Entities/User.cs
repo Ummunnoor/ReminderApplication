@@ -1,10 +1,11 @@
-﻿using ReminderApplication.Contracts;
+﻿using Microsoft.EntityFrameworkCore.Internal;
+using ReminderApplication.Contracts;
 
 namespace ReminderApplication.Entities
 {
     public class User : AuditableEntity
     {
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } 
         public string LastName { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }

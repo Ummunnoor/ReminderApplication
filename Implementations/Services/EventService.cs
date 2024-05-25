@@ -5,18 +5,27 @@ using ReminderApplication.Entities;
 using ReminderApplication.Implementations.Repositories;
 using ReminderApplication.Interfaces.Services;
 using ReminderApplication.Interfaces.Repositories;
+using ReminderApplication.SmsServices;
+using ReminderApplication.EmailServices;
 
 namespace ReminderApplication.Implementations.Services
 {
     public class EventService : IEventService
     {
         private readonly IEventRepository _eventRepository;
-        public EventService(IEventRepository eventrepository)
+        private readonly IUserRepository _userRepository;
+        private readonly IMailServices _mailService;
+        private readonly ISmsService _smsService;
+        public EventService(IEventRepository eventrepository, IMailServices mailService, ISmsService smsService, IUserRepository userRepository)
         {
             _eventRepository = eventrepository;
+            _mailService = mailService;
+            _smsService = smsService;
+            _userRepository = userRepository;
         }
         public async Task<BaseResponse> CreateEventAsync(int UserId, CreateEventRequestModel model)
         {
+            var user = await _userRepository.GetAsync(UserId);
             var _event = await _eventRepository.GetAsync(x => x.Id == UserId);
             if (_event != null)
             {
@@ -34,10 +43,26 @@ namespace ReminderApplication.Implementations.Services
                 Location = model.Location,
                 StartDateTime = model.StartDateTime,
                 EndDateTime = model.EndDateTime,
-
+                Description = model.Description,
+                User = user,
+                UserId = UserId,
             };
 
             await _eventRepository.CreateAsync(@event);
+            var mailRequest = new MailRequest
+            {
+                Subject = "Welcome To Reminder Application",
+                ToEmail = @event.User.Email,
+                ToName = @event.User.Email,
+                HtmlContent = $"<html><body><h1>Hello {@event.User.Username}, You have a {@event.Title} scheduled  on {@event.StartDateTime} which is to end on {@event.EndDateTime}",           
+            };  
+            _mailService.SendEMailAsync(mailRequest);
+            var smsRequest = new SmsRequest
+            {
+                Recipient = @event.User.PhoneNumber,
+                Content = $" Dear {@event.User.Username},You have a {@event.Title} scheduled  on {@event.StartDateTime} which is to end on {@event.EndDateTime}",
+            };
+            _smsService.SendSmsAsync(smsRequest);
             return new BaseResponse
             {
                 Message = "Event created successfully",

@@ -7,6 +7,7 @@ using ReminderApplication.Interfaces.Services;
 using ReminderApplication.Interfaces.Repositories;
 using Microsoft.Extensions.Logging;
 using ReminderApplication.EmailServices;
+using ReminderApplication.SmsServices;
 
 namespace ReminderApplication.Implementations.Services
 {
@@ -15,12 +16,14 @@ namespace ReminderApplication.Implementations.Services
         private readonly IUserRepository _userRepository;
         private readonly IAdminRepository _adminRepository;
         private readonly IMailServices _mailServices;
+        private readonly ISmsService _smsServices;
 
-        public AdminService(IUserRepository userRepository, IAdminRepository adminRepository,IMailServices mailServices)
+        public AdminService(IUserRepository userRepository, IAdminRepository adminRepository,IMailServices mailServices,ISmsService smsService)
         {
             _userRepository = userRepository;
             _adminRepository = adminRepository;
             _mailServices = mailServices;
+            _smsServices = smsService;
 
         }
 
@@ -53,14 +56,7 @@ namespace ReminderApplication.Implementations.Services
                 IsDeleted = false,
             };
             var addAdmin = await _adminRepository.CreateAsync(admins);
-            var mailRequest = new MailRequest
-            {
-                Subject = "Welcome To Reminder Application",
-                ToEmail = addAdmin.User.Email,
-                ToName = addAdmin.User.Email,
-                HtmlContent = $"<html><body><h1>Hello {addAdmin.User.Email}, You have successfully created a reminder for {model.FirstName}/'s event.</h1></body></html>",
-            };
-            _mailServices.SendEMailAsync(mailRequest);
+            
             return new BaseResponse
             {
                 Message = "Admin Added Successfully",

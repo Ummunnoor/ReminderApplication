@@ -27,24 +27,19 @@ namespace ReminderApplication.Implementations.Services
                     Success = false,
                 };
             }
-            var _user = new User
+            
+            var users = new User()
             {
                 Email = model.Email,
                 Password = model.Password,
-            };
-            var adduser = await _userRepository.CreateAsync(_user);
-            var custm = new User()
-            {
-
                 Username = model.Username,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 PhoneNumber = model.PhoneNumber,
-                Id = adduser.Id,
             };
 
-            var custom = await _userRepository.CreateAsync(custm);
-            if (custom == null)
+            var client = await _userRepository.CreateAsync(users);
+            if (client == null)
             {
                 return new BaseResponse()
                 {

@@ -59,6 +59,7 @@ namespace ReminderApplication.Controllers
             return View();
         }
         public async Task<IActionResult> Login(string email, string password)
+        
         {
             if (HttpContext.Request.Method == "POST")
             {
@@ -83,6 +84,7 @@ namespace ReminderApplication.Controllers
             return View();
 
         }
+
 
         public IActionResult Logout()
         {

@@ -10,10 +10,17 @@
             @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", @required = "required" })
         </div>
     </div>
+    
     <div class="form-group">
         @Html.LabelFor(x => x.Title, new { @class = "control-label col-lg-2" })
         <div class="col-lg-10">
             @Html.TextBoxFor(x => x.Title, new { @class = "form-control", @required = "required" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.Description , new { @class = "control-label col-lg-2" })
+        <div class="col-lg-10">
+            @Html.TextBoxFor(x => x.Description, new { @class = "form-control", @required = "required" })
         </div>
     </div>
     <div class="form-group">
@@ -28,7 +35,8 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class='input-group dateTime' id="datetimepicker">
-                        @Html.TextBox("Time", Model.StartDateTime, new { @class = "form-control" })
+                        @Html.TextBoxFor(x => x.StartDateTime, new { @class = "form-control", @required = "required", @type = "date" })
+                        @* @Html.TextBox("Time", Model.StartDateTime, new { @class = "form-control" }) *@
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -43,7 +51,8 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class='input-group date' id="datetimepicker">
-                        @Html.TextBox("Time", Model.EndDateTime, new { @class = "form-control" })
+                        @Html.TextBoxFor(x => x.EndDateTime, new { @class = "form-control", @required = "required", @type = "date" })
+                        @* @Html.TextBox("Time", Model.EndDateTime, new { @class = "form-control" }) *@
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -52,5 +61,6 @@
             </div>
         </div>
     </div>
+    <input type="submit"/>
 </form>
 

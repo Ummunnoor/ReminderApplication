@@ -6,6 +6,7 @@ using ReminderApplication.Implementations.Repositories;
 using ReminderApplication.Implementations.Services;
 using ReminderApplication.Interfaces.Repositories;
 using ReminderApplication.Interfaces.Services;
+using ReminderApplication.SmsServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,8 @@ builder.Services.AddScoped<IReminderService, ReminderService>();
 builder.Services.AddScoped<IReminderRepository, ReminderRepository>();
 
 builder.Services.AddScoped<IMailServices, MailService>();
+
+builder.Services.AddScoped<ISmsService, SmsService>();
 
 var app = builder.Build();
 

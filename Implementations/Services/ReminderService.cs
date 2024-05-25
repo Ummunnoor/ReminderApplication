@@ -7,6 +7,7 @@ using ReminderApplication.Interfaces.Repositories;
 using ReminderApplication.Entities.Enums;
 using ReminderApplication.EmailServices;
 using ReminderApplication.Interfaces.Services;
+using ReminderApplication.SmsServices;
 
 namespace ReminderApplication.Implementations.Services
 {
@@ -15,14 +16,14 @@ namespace ReminderApplication.Implementations.Services
         private readonly IReminderRepository _reminderRepository;
         private readonly IEventRepository _eventRepository;
         private readonly IUserRepository _userRepository;
-        private readonly IMailServices _mailService;
+        
 
-        public ReminderService(IMailServices mailService, IReminderRepository reminderRepository, IEventRepository eventRepository, IUserRepository userRepository)
+        public ReminderService(IReminderRepository reminderRepository, IEventRepository eventRepository, IUserRepository userRepository)
         {
             _reminderRepository = reminderRepository;
             _eventRepository = eventRepository;
             _userRepository = userRepository;
-            _mailService = mailService;
+            
         }
         public async Task<BaseResponse> CreateReminderAsync(CreateReminderRequestModel model)
         {
@@ -50,14 +51,7 @@ namespace ReminderApplication.Implementations.Services
 
             };
             await _reminderRepository.CreateAsync(reminders);
-            var mailRequest = new MailRequest
-            {
-                Subject = "Welcome To Reminder Application",
-                ToEmail = @event.User.Email,
-                ToName = @event.User.Email,
-                HtmlContent = $"<html><body><h1>Hello {@event.User.Email}, You have successfully created a reminder for {model.UserName}/'s event.</h1></body></html>",
-            };
-            _mailService.SendEMailAsync(mailRequest);
+
             return new BaseResponse()
             {
                 Message = $"You have successfully created a reminder for {model.UserName}/'s event.",

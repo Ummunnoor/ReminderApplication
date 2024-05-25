@@ -16,10 +16,10 @@ namespace ReminderApplication.Controllers
             _eventService = eventService;
             _userService = userService;
         }
-        public async Task<IActionResult> CreateEvent(CreateEventRequestModel model)
+        public async Task<IActionResult> Create(int UserId,CreateEventRequestModel model)
         {
             if (HttpContext.Request.Method == "POST")
-            {
+            {   
                 var context = Convert.ToInt32(HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value);
                 var @event = await _eventService.CreateEventAsync(context, model);
                 if (@event.Success == true)
